@@ -1,0 +1,51 @@
+{
+  "name": "testweave-sdk",
+  "version": "0.0.1",
+  "description": "This is the SDK of TestWeave. TestWeave is the testing environment of the Arweave.",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "ts-mocha tests/**/*.test.ts",
+    "coverage": "nyc npm test",
+    "lint": "eslint src/**/*.ts",
+    "generate:docs": "npx typedoc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArweaveTeam/testweave-sdk"
+  },
+  "keywords": [
+    "SmartWeave",
+    "Arweave",
+    "Testing",
+    "Suite",
+    "Typescrypt"
+  ],
+  "author": "The Arweave Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ArweaveTeam/testweave-sdk/issues"
+  },
+  "homepage": "https://github.com/ArweaveTeam/testweave-sdk#readme",
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "latest",
+    "@types/chai": "latest",
+    "@types/eslint": "latest",
+    "@types/mocha": "latest",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "chai": "latest",
+    "eslint": "latest",
+    "mocha": "latest",
+    "nyc": "latest",
+    "ts-mocha": "latest",
+    "typedoc": "latest",
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "arweave": "^1.10.11",
+    "axios": "^0.21.1",
+    "smartweave": "^0.4.27"
+  }
+}
