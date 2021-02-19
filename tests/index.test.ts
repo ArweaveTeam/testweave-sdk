@@ -1,5 +1,5 @@
 import TestWeave from '../src/index';
-import arweaveInstance from './_init_arweave';
+import arweave from './_init_arweave';
 
 import { expect } from 'chai';
 import rootJWK from './fixtures/arweave-keyfile-MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y.json'
@@ -7,7 +7,7 @@ import rootJWK from './fixtures/arweave-keyfile-MlV6DeOtRmakDOf6vgOBlif795tcWimg
 
 describe('testing TestWeave', function (): void {
   it('should correctly init a TestWeave instance', () : void => {
-    const testWeave = TestWeave.init(arweaveInstance);
+    const testWeave = TestWeave.init(arweave);
 
     expect(testWeave.getArweaveInstance().api).to.not.be.null;
     expect(testWeave.getArweaveInstance().wallets).to.not.be.null;
@@ -25,9 +25,7 @@ describe('testing TestWeave', function (): void {
 
   it('Random tests', async (): Promise<void> => {
     this.timeout(10000);
-    const testWeave = TestWeave.init(arweaveInstance);
-    const arweave = testWeave.getArweaveInstance();
-
+    const testWeave = TestWeave.init(arweave);
     // generate a wallets
     const jkw = await arweave.wallets.generate();
     const generatedAddr = await arweave.wallets.getAddress(jkw);

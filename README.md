@@ -26,21 +26,13 @@ Firstly you need to create a TestWeave instance on the top on an Arweave node, a
 
 ```javascript
 import TestWeave from 'TestWeave';
+import Arweave form 'Arweave';
 
-// init a TestWeave instance
-const testWeave = TestWeave.init({
-  host: 'localhost',
-  port: 3000,
-  protocol: 'http',
-});
+// init arweave as usual
+const arweave = Arweave.init({});
 
-// generate a TestWeave wallet having a balance of 20 AR
-
-const testWallet = await testWeave.wallets.generate({
-  balanceAr: 20,
-});
-
-
+// init TestWeave on the top of arweave
+const testWeave = TestWeave.init(arweave);
 
 ```
 

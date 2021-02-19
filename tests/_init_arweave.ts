@@ -1,7 +1,7 @@
 import Arweave from 'arweave';
 
 // test net
-const arweaveInstace = Arweave.init({
+const arweave = Arweave.init({
   host: '46.101.45.117',
   port: 1984,
   protocol: 'http',
@@ -18,4 +18,4 @@ const arweaveInstace = Arweave.init({
   logging: false,
 }); */
 
-export default arweaveInstace;
+export default arweave;
