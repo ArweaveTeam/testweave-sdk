@@ -4,8 +4,6 @@ This is the SDK of the TestWeave. TestWeave is the testing environment of the Ar
 
 ## Installation
 
-> WARING: although there are no formal restrictions, this SDK should never be used into a production environment. It is intended to be used only as a testing tool for your Arweave-related projects. 
-
 Install the SDK with: 
 
 ```shell
