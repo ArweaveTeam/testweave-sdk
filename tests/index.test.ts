@@ -37,11 +37,13 @@ describe('testing TestWeave', function (): void {
 
     await arweave.transactions.sign(transaction, rootJWK)
     await arweave.transactions.post(transaction);
+    // await testWeave.mine();
 
-    console.log(`Status: ${(await arweave.transactions.getStatus(transaction.id)).status} - ${transaction.id} not yet mined`);
+    console.log(`Status: ${(await arweave.transactions.getStatus(transaction.id)).status} - ${transaction.id} not found`);
     await testWeave.mine();
-    await testWeave.mine();
-    console.log(`Status: ${(await arweave.transactions.getStatus(transaction.id)).status} - ${transaction.id} not yet mined`);
+    console.log(`Status: ${(await arweave.transactions.getStatus(transaction.id)).status} - ${transaction.id} pending`);
+    // await testWeave.mine();
+    console.log(`Status: ${(await arweave.transactions.getStatus(transaction.id)).status} - ${transaction.id} confirmed`);
     // const test = await TestWeave.getArweaveInstance().transactions.getStatus('7T4LA4BDpq-5Z4_S7efiXfo1Vze6eptx7nU0MQxP0TA');
     // console.log(test);
   });

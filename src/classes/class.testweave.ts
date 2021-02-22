@@ -1,4 +1,5 @@
 import Arweave from 'arweave';
+import Transaction from 'arweave/node/lib/transaction';
 import { AxiosResponse } from 'axios';
 import ITestWeave from '../interfaces/interface.TestWeave';
 import TestWeaveRequest from './class.testweave-request';
@@ -49,7 +50,11 @@ export default class TestWeave implements ITestWeave {
    * @returns the axios response created around the call to the /mine endpoint
   */
   async mine(): Promise<AxiosResponse> {
-    const result = await this.getArweaveInstance().api.post(`mine`, 'mine');
-    return result;
+    const result = await this.getArweaveInstance().api.post(`mine`, '');
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(result);
+      }, 6000);
+    });
   }
 }
