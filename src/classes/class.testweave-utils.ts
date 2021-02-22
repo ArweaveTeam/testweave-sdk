@@ -1,17 +1,18 @@
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
+import { AxiosResponse } from 'axios';
 import rootJWK from '../assets/arweave-keyfile-MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y.json';
 import ITestWeaveUtils from '../interfaces/interface.testweave-utils';
 
 export default class TestWeaveUtils implements ITestWeaveUtils {
-  private arweaveInstance: Arweave;
+  private _arweave: Arweave;
   /**
    * The constructor of the class. Should never be called directly, since this
    * is a static class.
    * @param arweaveInstance an arweave instance.
    */
   private constructor(arweaveInstance: Arweave) {
-    this.arweaveInstance = arweaveInstance;
+    this._arweave = arweaveInstance;
   }
   /**
    * Returns a TestWeave instance
@@ -24,16 +25,36 @@ export default class TestWeaveUtils implements ITestWeaveUtils {
     return new TestWeaveUtils(arweaveInstance);
   }
 
+  /**
+   * Returns the JWK of the root address
+   * @returns JWKInterface the JWK of the root address
+   */
   public getRootJWK(): JWKInterface {
     return rootJWK;
   }
 
-  public dropFromRootAddress(): Promise<void> {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, 6000);
-    });
+  /**
+   * Drops the given winston from the root JWK to the given address.
+   * @param targetAddress the address to which drop the winston
+   * @param winstonBalance the amount of winston that must be dropped
+   */
+  public async dropFromRootAddress(targetAddress:string, winstonBalance: string): Promise<void> {
+    const transaction = await this._arweave.createTransaction({
+      target: targetAddress,
+      quantity: winstonBalance
+    }, this.getRootJWK());
+    await this._arweave.transactions.sign(transaction, rootJWK)
+    await this._arweave.transactions.post(transaction);
+    await this.mine();
+  }
+
+  /**
+   * Mines a new block in the TestWeave Network
+   * @returns the axios response created around the call to the /mine endpoint
+  */
+  public async mine(): Promise<AxiosResponse> {
+    const result = await this._arweave.api.post(`mine`, '');
+    return result;
   }
 
 }

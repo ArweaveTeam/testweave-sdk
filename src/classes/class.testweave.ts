@@ -64,11 +64,12 @@ export default class TestWeave implements ITestWeave {
   }
 
   /**
-   * Mines a new block in the TestWeave Network
-   * @returns the axios response created around the call to the /mine endpoint
-  */
-  async mine(): Promise<AxiosResponse> {
-    const result = await this.arweave.api.post(`mine`, '');
+   * Drops the given winston from the root JWK to the given address.
+   * @param targetAddress the address to which drop the winston
+   * @param winstonBalance the amount of winston that must be dropped
+   */
+  public async drop(targetAddress: string, winstonBalance: string): Promise<void> {
+    const result = await this._utils.dropFromRootAddress(targetAddress, winstonBalance);
     return result;
   }
 }
