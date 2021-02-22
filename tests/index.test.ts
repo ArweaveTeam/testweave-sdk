@@ -2,32 +2,35 @@ import TestWeave from '../src/index';
 import arweave from './_init_arweave';
 
 import { expect } from 'chai';
-import rootJWK from './fixtures/arweave-keyfile-MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y.json'
-
 
 describe('testing TestWeave', function (): void {
   it('should correctly init a TestWeave instance', () : void => {
     const testWeave = TestWeave.init(arweave);
-
-    expect(testWeave.getArweaveInstance().api).to.not.be.null;
-    expect(testWeave.getArweaveInstance().wallets).to.not.be.null;
-    expect(testWeave.getArweaveInstance().transactions).to.not.be.null;
-    expect(testWeave.getArweaveInstance().silo).to.not.be.null;
-    expect(testWeave.getArweaveInstance().network).to.not.be.null;
-    expect(testWeave.getArweaveInstance().ar).to.not.be.null;
-  });
-  it('getArweaveInstance() should throw an error when TestWeave was init with an empty arweave instance', (): void => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const testWeave = TestWeave.init({});
-    expect(() => testWeave.getArweaveInstance()).to.throw();
+    expect(testWeave.arweave.api).to.not.be.null;
+    expect(testWeave.arweave.wallets).to.not.be.null;
+    expect(testWeave.arweave.transactions).to.not.be.null;
+    expect(testWeave.arweave.silo).to.not.be.null;
+    expect(testWeave.arweave.network).to.not.be.null;
+    expect(testWeave.arweave.ar).to.not.be.null;
   });
 
-  it('Random tests', async (): Promise<void> => {
-    this.timeout(10000);
+  it('This should correctly retrieve the testweave root JWK and its address must be MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y', async (): Promise<void> => {
     const testWeave = TestWeave.init(arweave);
+    const rootAddress = await arweave.wallets.getAddress(testWeave.rootJWK);
+    const rootBalance = await arweave.wallets.getBalance(rootAddress);
+
+
+    // the address should be equal to MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y
+    expect(rootAddress).equal('MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y');
+    // the balance of the root wallet should be equal to 100000000000000000000000000000
+    expect(rootBalance).equal('100000000000000000000000000000');
+
+
+
+    // get the root wallet balance
+
     // generate a wallets
-    const jkw = await arweave.wallets.generate();
+    /*const jkw = await arweave.wallets.generate();
     const generatedAddr = await arweave.wallets.getAddress(jkw);
 
     const transaction = await arweave.createTransaction({
@@ -45,8 +48,7 @@ describe('testing TestWeave', function (): void {
     // await testWeave.mine();
     console.log(`Status: ${(await arweave.transactions.getStatus(transaction.id)).status} - ${transaction.id} confirmed`);
     // const test = await TestWeave.getArweaveInstance().transactions.getStatus('7T4LA4BDpq-5Z4_S7efiXfo1Vze6eptx7nU0MQxP0TA');
-    // console.log(test);
+    // console.log(test); */
   });
 });
-
 
