@@ -19,7 +19,7 @@ describe('testing TestWeave', function (): void {
     const rootAddress = await arweave.wallets.getAddress(testWeave.rootJWK);
     const rootBalance = await arweave.wallets.getBalance(rootAddress);
 
-    console.log(await arweave.wallets.getBalance('B057ekCSC6-PNIdOK1_JhJawqylWxU-DiU_IUYKW7ns'));
+    console.log(await arweave.wallets.getBalance('9uxxAsI6GzX4paexlLboJ61mffdpgFKfeuL0Q1Z6wxE'));
 
     // the address should be equal to MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y
     expect(rootAddress).equal('MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y');

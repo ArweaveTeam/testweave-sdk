@@ -72,4 +72,14 @@ export default class TestWeave implements ITestWeave {
     const result = await this._utils.dropFromRootAddress(targetAddress, winstonBalance);
     return result;
   }
+
+  /**
+   * Mines a new block in the TestWeave Network
+   * @returns the axios response created around the call to the /mine endpoint
+  */
+  public async mine(): Promise<AxiosResponse> {
+    const result = await this._utils.mine();
+    return result;
+  }
+
 }
