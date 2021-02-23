@@ -2,7 +2,7 @@ import Arweave from 'arweave';
 
 // test net
 const arweave = Arweave.init({
-  host: '46.101.45.117',
+  host: 'localhost',
   port: 1984,
   protocol: 'http',
   timeout: 20000,

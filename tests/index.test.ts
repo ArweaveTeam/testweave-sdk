@@ -23,8 +23,8 @@ describe('testing TestWeave', function (): void {
 
     // the address should be equal to MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y
     expect(rootAddress).equal('MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y');
-    // the balance of the root wallet should be equal to 100000000000000000000000000000
-    expect(rootBalance).equal('100000000000000000000000000000');
+    // the balance of the root wallet should be equal to 10000000000000000000
+    expect(rootBalance).equal('10000000000000000000');
 
     const jkw = await arweave.wallets.generate();
     const generatedAddr = await arweave.wallets.getAddress(jkw);
