@@ -1,4 +1,3 @@
-import Transaction from 'arweave/node/lib/transaction';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { AxiosResponse } from 'axios';
 
