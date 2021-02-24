@@ -37,7 +37,63 @@ const testWeave = TestWeave.init(arweave);
 
 And thats it! Now you can use your arweave instance as usual, but every interaction will be performed on the test network! 
 
-The SDK supplies some useful helpers as described in the following section. 
+For a fast bootstrap checkout the examples in the following sections.
+
+To check all the useful helpers that the SDK supplies, checkout the XXX section. 
+
+## Example 1 - Submitting a data transaction
+
+1. Initialize the arweave node and the TestWeave on it:
+   
+```javascript
+import Arweave from 'arweave';
+import TestWeave from 'testweave-sdk';
+
+const arweave = Arweave.init({
+  host: 'arweave.net',
+  port: 443,
+  protocol: 'https',
+  timeout: 20000,
+  logging: false,
+}); 
+
+const testWeave = TestWeave.init(arweave);
+```
+
+2. Create a data transaction, sign and post it
+
+```javascript
+const data = `
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Info about arweave</title>
+  </head>
+  <body>
+    Arweave is the best web3-related thing out there!!!
+  </body>
+</html>`
+const dataTransaction = await arweave.createTransaction({
+  data,
+}, testWeave.rootJWK)
+
+await arweave.transactions.sign(dataTransaction, testWeave.rootJWK)
+const statusBeforePost = await arweave.transactions.getStatus(dataTransaction.id)
+console.log(statusBeforePost); // this will return 404
+await arweave.transactions.post(dataTransaction)
+const statusAfterPost = await arweave.transactions.getStatus(dataTransaction.id)
+console.log(statusAfterPost); // this will return 202
+```
+
+3. Use the TestWeave to instantly mine the block that contains the transaction
+
+```javascript
+await testWeave.mine();
+const statusAfterMine = await arweave.transactions.getStatus(dataTransaction.id)
+console.log(statusAfterMine); // this will return 200
+```
+
+Thats it! 
 
 ## SDK helpers
 
