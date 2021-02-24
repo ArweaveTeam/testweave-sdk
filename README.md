@@ -2,7 +2,7 @@
 
 This is the SDK of the TestWeave. TestWeave is the testing environment of the Arweave. 
 
-> Note that to work with TestWeave, you need to install a local testnet. To do so, checkout this repo: XXXX
+> Note that to work with the TestWeave, you need to install a local testnet. To do so, checkout this repo: XXXX
 
 ## Installation
 
@@ -98,4 +98,29 @@ console.log(statusAfterMine); // this will return 200
 Thats it! 
 
 ## SDK helpers
+
+For easily test Arweave applications, the SDK supplies the helpers described in the following sections. 
+### drop(wallet, quantity) 
+
+Drops AR from the root wallet to another one. Use it as followings: 
+
+```javascript
+const jkw = await arweave.wallets.generate();
+const generatedAddr = await arweave.wallets.getAddress(jkw);
+await testWeave.drop(generatedAddr, '10000');
+const generatedAddressBalance = await arweave.wallets.getBalance(generatedAddr) // returns 10000
+```
+
+### mine()
+
+Mines the following block of the testnet and all the transactions contained in it.
+
+### getter rootJWK
+
+Returns the root JWK, it has an initial balance of 10000000 and the address MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y
+
+
+
+
+
 

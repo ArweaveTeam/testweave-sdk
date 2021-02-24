@@ -54,8 +54,12 @@ export default class TestWeaveUtils implements ITestWeaveUtils {
    * @returns the axios response created around the call to the /mine endpoint
   */
   public async mine(): Promise<AxiosResponse> {
-    await this.delay(6000);
+    await this.delay(1000);
+    // check if there are transactions in the pool
+    // const transactionsInThePool = await this._arweave.api.get('tx/ready_for_mining');
+    // console.log(transactionsInThePool.data);
     const result = await this._arweave.api.post('mine', '');
+    await this.delay(1000);
     return result;
   }
 
