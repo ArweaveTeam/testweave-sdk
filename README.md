@@ -2,7 +2,7 @@
 
 This is the SDK of the TestWeave. TestWeave is the testing environment of the Arweave. 
 
-> Note that to work with the TestWeave, you need to install a local testnet. To do so, checkout this repo: XXXX
+> Note that to work with the TestWeave, you need to install a local testnet. To do so, checkout the [TestWeave Docker Repository](https://github.com/ArweaveTeam/testweave-docker).
 
 ## Installation
 
