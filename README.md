@@ -115,10 +115,17 @@ const generatedAddressBalance = await arweave.wallets.getBalance(generatedAddr) 
 
 Mines the following block of the testnet and all the transactions contained in it.
 
+```javascript
+await testWeave.mine();
+```
+
 ### getter rootJWK
 
 Returns the root JWK, it has an initial balance of 10000000 and the address MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y
 
+```javascript
+const rootJWK = await testWeave.rootJWK;
+```
 
 
 
