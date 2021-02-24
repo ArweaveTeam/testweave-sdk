@@ -4,6 +4,7 @@ import arweave from './_init_arweave';
 import { expect } from 'chai';
 
 describe('testing TestWeave data transactions', function (): void {
+  this.timeout(10000);
   it('This should correctly create a test data transaction', async (): Promise<void> => {
     const testWeave = TestWeave.init(arweave);
     const data = `
@@ -22,6 +23,8 @@ describe('testing TestWeave data transactions', function (): void {
     }, testWeave.rootJWK);
 
     await arweave.transactions.sign(dataTransaction, testWeave.rootJWK)
+    const statusBeforePost = await arweave.transactions.getStatus(dataTransaction.id)
+    console.log(statusBeforePost);
     await arweave.transactions.post(dataTransaction);
 
     console.log(dataTransaction.id);
@@ -30,9 +33,6 @@ describe('testing TestWeave data transactions', function (): void {
     await testWeave.mine();
     const statusAfter = await arweave.transactions.getStatus(dataTransaction.id)
     console.log(statusAfter);
-    await testWeave.mine();
-    const statusAfterAfter = await arweave.transactions.getStatus(dataTransaction.id)
-    console.log(statusAfterAfter);
 
   });
 });

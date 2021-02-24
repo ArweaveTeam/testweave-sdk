@@ -4,6 +4,7 @@ import arweave from './_init_arweave';
 import { expect } from 'chai';
 
 describe('testing TestWeave', function (): void {
+  this.timeout(10000);
   it('should correctly init a TestWeave instance', () : void => {
     const testWeave = TestWeave.init(arweave);
     expect(testWeave.arweave.api).to.not.be.null;
@@ -19,7 +20,7 @@ describe('testing TestWeave', function (): void {
     const rootAddress = await arweave.wallets.getAddress(testWeave.rootJWK);
     const rootBalance = await arweave.wallets.getBalance(rootAddress);
 
-    console.log(await arweave.wallets.getBalance('9uxxAsI6GzX4paexlLboJ61mffdpgFKfeuL0Q1Z6wxE'));
+    console.log(await arweave.wallets.getBalance('ULaxboFQDf3jDEyHcv5q3UxTjDvp2GKVfyRxgVPm4Jc'));
 
     // the address should be equal to MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y
     expect(rootAddress).equal('MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y');

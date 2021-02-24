@@ -1,4 +1,5 @@
 import Arweave from 'arweave';
+import Transaction from 'arweave/node/lib/transaction';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { AxiosResponse } from 'axios';
 import rootJWK from '../assets/arweave-keyfile-MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y.json';
@@ -53,8 +54,12 @@ export default class TestWeaveUtils implements ITestWeaveUtils {
    * @returns the axios response created around the call to the /mine endpoint
   */
   public async mine(): Promise<AxiosResponse> {
-    const result = await this._arweave.api.post(`mine`, '');
+    await this.delay(6000);
+    const result = await this._arweave.api.post('mine', '');
     return result;
   }
 
+  private async delay(ms: number): Promise<void> {
+    return new Promise(res => setTimeout(res, ms));
+  }
 }
