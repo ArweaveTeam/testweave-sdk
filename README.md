@@ -30,7 +30,13 @@ Firstly you need to create a TestWeave instance on the top on an Arweave node, a
 import TestWeave from 'TestWeave';
 
 // init arweave as usual
-const arweave = TestWeave.init().getArweaveInstance();
+const arweave = Arweave.init({
+  host: 'arweave.net',
+  port: 443,
+  protocol: 'https',
+  timeout: 20000,
+  logging: false,
+});
 
 // init TestWeave on the top of arweave
 const testWeave = TestWeave.init(arweave);

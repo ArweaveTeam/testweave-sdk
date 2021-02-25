@@ -28,7 +28,7 @@ describe('testing TestWeave data transactions', function (): void {
     // the status should now be equal to 404
     expect(statusBeforePost.status).equal(404);
 
-
+    console.log(dataTransaction.id);
     await arweave.transactions.post(dataTransaction);
     await testWeave.mine();
     const statusAfter = await arweave.transactions.getStatus(dataTransaction.id)
