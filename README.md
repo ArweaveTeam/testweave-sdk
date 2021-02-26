@@ -43,7 +43,7 @@ const testWeave = TestWeave.init(arweave);
 
 ```
 
-And thats it! Now you can use your arweave instance as usual, but every interaction will be performed on the test network! 
+And here you go! Now you can use your arweave instance as usual, but every interaction will be performed on the test network! 
 
 For a fast bootstrap checkout the examples in the following sections.
 

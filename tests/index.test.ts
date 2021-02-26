@@ -6,13 +6,13 @@ import { expect } from 'chai';
 describe('testing TestWeave', function (): void {
   this.timeout(10000);
   it('should correctly init a TestWeave instance', () : void => {
-    const testWeave = TestWeave.init(arweave);
-    expect(testWeave.arweave.api).to.not.be.null;
-    expect(testWeave.arweave.wallets).to.not.be.null;
-    expect(testWeave.arweave.transactions).to.not.be.null;
-    expect(testWeave.arweave.silo).to.not.be.null;
-    expect(testWeave.arweave.network).to.not.be.null;
-    expect(testWeave.arweave.ar).to.not.be.null;
+    TestWeave.init(arweave);
+    expect(arweave.api).to.not.be.null;
+    expect(arweave.wallets).to.not.be.null;
+    expect(arweave.transactions).to.not.be.null;
+    expect(arweave.silo).to.not.be.null;
+    expect(arweave.network).to.not.be.null;
+    expect(arweave.ar).to.not.be.null;
   });
 
   it('This should correctly retrieve the testweave root JWK and its address must be MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y', async (): Promise<void> => {

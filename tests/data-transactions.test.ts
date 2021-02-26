@@ -7,7 +7,6 @@ describe('testing TestWeave data transactions', function (): void {
   this.timeout(10000);
   it('This should correctly create a test data transaction', async (): Promise<void> => {
     const testWeave = TestWeave.init(arweave);
-    testWeave.mine();
     const data = `
     <html>
       <head>
@@ -28,7 +27,6 @@ describe('testing TestWeave data transactions', function (): void {
     // the status should now be equal to 404
     expect(statusBeforePost.status).equal(404);
 
-    console.log(dataTransaction.id);
     await arweave.transactions.post(dataTransaction);
     await testWeave.mine();
     const statusAfter = await arweave.transactions.getStatus(dataTransaction.id)

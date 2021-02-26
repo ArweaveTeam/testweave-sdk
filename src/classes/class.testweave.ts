@@ -1,13 +1,15 @@
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { AxiosResponse } from 'axios';
+import { AxiosRequestConfig } from 'axios';
 import ITestWeave from '../interfaces/interface.TestWeave';
 import TestWeaveRequest from './class.testweave-request';
+import TestWeaveTransactionsManager from './class.testweave-transactions-manager';
 import TestWeaveUtils from './class.testweave-utils';
 
-export default class TestWeave implements ITestWeave {
+class TestWeave implements ITestWeave {
   private _arweave: Arweave;
   private _utils: TestWeaveUtils;
+  private _transactionManager: TestWeaveTransactionsManager;
   private _rootJWK: JWKInterface;
 
   /**
@@ -16,10 +18,24 @@ export default class TestWeave implements ITestWeave {
    * @param arweaveInstance an arweave instance.
    */
   private constructor(arweaveInstance: Arweave) {
+    // init the transaction TransactionManager
+    this._transactionManager = TestWeaveTransactionsManager.init(arweaveInstance);
+    // get the api config
+    const apiConfig = arweaveInstance.api.config;
+    const testWeaveRequest = TestWeaveRequest.init(apiConfig);
+    // overwrite the arweave.api.request method, so that it can include the requested headers
+    arweaveInstance.api.request = () => testWeaveRequest.getRequest();
+    // overwrite the arweave.api.request method, so that it can save requests bye means of the transaction manager
+    arweaveInstance.api.post = (
+      endpoint: string,
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      body: Buffer | string | object,
+      config?: AxiosRequestConfig,
+    ) => this._transactionManager.getPost(endpoint, body, config);
     // init the arweave instance
     this._arweave = arweaveInstance;
     // init the utils
-    this._utils = TestWeaveUtils.init(this.arweave);
+    this._utils = TestWeaveUtils.init(this._arweave);
     // sets the root JWL
     this._rootJWK = this._utils.getRootJWK();
   }
@@ -31,28 +47,15 @@ export default class TestWeave implements ITestWeave {
   public static init(
     arweaveInstance: Arweave,
   ): TestWeave {
-    // overwrite the arweave.api.request method, so that it can include the requested headers
-    // get the api config
-    if (arweaveInstance && Object.keys(arweaveInstance).length) {
-      const apiConfig = arweaveInstance.api.config;
-      const testWeaveRequest = TestWeaveRequest.init(apiConfig);
-      arweaveInstance.api.request = () => testWeaveRequest.getRequest();
+    try {
+      // create the testweave instace
+      const testWeaveInstance = new TestWeave(arweaveInstance);
+      // return the testweave instance
+      return testWeaveInstance;
+    } catch (err) {
+      console.log(err);
+      throw new Error('o cazzo');
     }
-    // return the testweave instance
-    return new TestWeave(arweaveInstance);
-  }
-  /**
-   * Returns the arweave instance on the top of which the TestWeave instance was created.
-   * @returns Arweave the arweave instance on the top of which the TestWeave instance was created.
-   * @throws Error if the arweave instance was not instanced
-   */
-  public get arweave(): Arweave {
-    if (
-      this._arweave &&
-      this._arweave instanceof Arweave) {
-      return this._arweave;
-    }
-    throw new Error('You must init TestWeave with a non null arweave instance before calling getArweaveInstance()');
   }
 
   /**
@@ -69,7 +72,7 @@ export default class TestWeave implements ITestWeave {
    * @param winstonBalance the amount of winston that must be dropped
    */
   public async drop(targetAddress: string, winstonBalance: string): Promise<void> {
-    const result = await this._utils.dropFromRootAddress(targetAddress, winstonBalance);
+    const result = await this._utils.dropFromRootAddress(targetAddress, winstonBalance, this._transactionManager);
     return result;
   }
 
@@ -77,9 +80,10 @@ export default class TestWeave implements ITestWeave {
    * Mines a new block in the TestWeave Network
    * @returns the axios response created around the call to the /mine endpoint
   */
-  public async mine(): Promise<AxiosResponse> {
-    const result = await this._utils.mine();
+  public async mine(): Promise<Array<string>> {
+    const result = await this._utils.mine(this._transactionManager);
     return result;
   }
-
 }
+
+export default TestWeave;

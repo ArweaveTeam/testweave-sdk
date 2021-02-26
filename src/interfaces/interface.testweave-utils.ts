@@ -1,8 +1,8 @@
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { AxiosResponse } from 'axios';
+import TestWeaveTransactionsManager from '../classes/class.testweave-transactions-manager';
 
 export default interface ITestWeaveUtils {
   getRootJWK(): JWKInterface;
-  dropFromRootAddress(targetAddress: string, winstonBalance: string): Promise<void>;
-  mine(): Promise<AxiosResponse>;
+  dropFromRootAddress(targetAddress: string, winstonBalance: string, transactionsManager: TestWeaveTransactionsManager): Promise<void>;
+  mine(transactionsManager: TestWeaveTransactionsManager): Promise<Array<string>>;
 }

@@ -8,7 +8,7 @@
     "test": "ts-mocha tests/**/*.test.ts",
     "coverage": "nyc npm test",
     "lint": "eslint src/**/*.ts",
-    "generate:docs": "npx typedoc"
+    "generate:docs": "npx typedoc --excludePrivate --excludeProtected"
   },
   "repository": {
     "type": "git",
