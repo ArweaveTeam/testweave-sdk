@@ -39,14 +39,15 @@ export default class TestWeaveUtils implements ITestWeaveUtils {
    * @param winstonBalance the amount of winston that must be dropped
    * @param transactionsPool the array containing the transactions pool
    */
-  public async dropFromRootAddress(targetAddress:string, winstonBalance: string, transactionsManager: TestWeaveTransactionsManager): Promise<void> {
+  public async dropFromRootAddress(targetAddress:string, winstonBalance: string, transactionsManager: TestWeaveTransactionsManager): Promise<string> {
     const transaction = await this._arweave.createTransaction({
       target: targetAddress,
       quantity: winstonBalance
     }, this.getRootJWK());
     await this._arweave.transactions.sign(transaction, rootJWK)
     await this._arweave.transactions.post(transaction);
-    await this.mine(transactionsManager);
+    const minedTransactions = await this.mine(transactionsManager);
+    return minedTransactions[0];
   }
 
   /**
@@ -66,7 +67,7 @@ export default class TestWeaveUtils implements ITestWeaveUtils {
    * Utility function to stop execution for a specific amount of time.
    * @param ms the amount of ms for which the execution must be stopped
    */
-  private async delay(ms: number): Promise<void> {
+  public async delay(ms: number): Promise<void> {
     return new Promise(res => setTimeout(res, ms));
   }
 }

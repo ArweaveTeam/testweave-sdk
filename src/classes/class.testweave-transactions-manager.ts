@@ -2,6 +2,7 @@ import Arweave from 'arweave';
 import Transaction from 'arweave/node/lib/transaction';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import ITestWeaveTransactionsManager from '../interfaces/interface.testweave-transactions-manager';
+import TestWeaveUtils from './class.testweave-utils';
 
 export default class TestWeaveTransactionsManager implements ITestWeaveTransactionsManager {
   private _arweave: Arweave;
@@ -31,38 +32,25 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
     return this._transactionsPool;
   }
 
+  /**
+   * Resolve the transactions pool
+   * @param minedTransactions
+   */
   public async resolvePool(minedTransactions: Array<string>): Promise<Array<string>> {
-    // console.log('mined transactions', minedTransactions);
     if (this._transactionsPool.length) {
-      // console.log('transactions in pol', this._transactionsPool);
-      // get the transactions in the ready for mining pool
       const readyForMiningTxs: Array<string> = (await this._arweave.api.get('tx/ready_for_mining')).data;
-      // console.log('ready for minng transactions', readyForMiningTxs);
-      // get the latest transaction on the transactions pool
       const lastTx: string = this._transactionsPool[this._transactionsPool.length - 1];
 
       if (readyForMiningTxs.includes(lastTx)) {
-      // while ((await this._arweave.api.get('tx/ready_for_mining')).data.includes(lastTx)) {
         await this._arweave.api.post('mine', '');
-        await this.delay(1001);
-
-        /* console.log((await this._arweave.api.get('tx/ready_for_mining')).data);
-        await this.delay(1001);
-        console.log((await this._arweave.api.get('tx/ready_for_mining')).data);
-        console.log(await this._arweave.transactions.getStatus(lastTx)); */
-
-        this._transactionsPool.pop()
-        minedTransactions.push(lastTx);
+        await TestWeaveUtils.init(this._arweave).delay(1001);
+        minedTransactions.push(this._transactionsPool.pop() as string);
         return minedTransactions;
       }
       const results = await this.resolvePool(minedTransactions);
       return results;
     }
     return minedTransactions;
-  }
-
-  private async delay(ms: number): Promise<void> {
-    return new Promise(res => setTimeout(res, ms));
   }
 
   /**

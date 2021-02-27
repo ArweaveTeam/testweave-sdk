@@ -32,7 +32,6 @@ describe('testing TestWeave data transactions', function (): void {
     const statusAfter = await arweave.transactions.getStatus(dataTransaction.id)
     // the status should now be equal to 200
     expect(statusAfter.status).equal(200);
-
   });
 });
 

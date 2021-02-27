@@ -54,7 +54,7 @@ class TestWeave implements ITestWeave {
       return testWeaveInstance;
     } catch (err) {
       console.log(err);
-      throw new Error('o cazzo');
+      throw new Error('TestWeave Error: Cannot init the TestWeave instance');
     }
   }
 
@@ -71,7 +71,7 @@ class TestWeave implements ITestWeave {
    * @param targetAddress the address to which drop the winston
    * @param winstonBalance the amount of winston that must be dropped
    */
-  public async drop(targetAddress: string, winstonBalance: string): Promise<void> {
+  public async drop(targetAddress: string, winstonBalance: string): Promise<string> {
     const result = await this._utils.dropFromRootAddress(targetAddress, winstonBalance, this._transactionManager);
     return result;
   }
