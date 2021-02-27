@@ -9,7 +9,7 @@ This is the SDK of the TestWeave. TestWeave is the testing environment of the Ar
 Install the SDK with: 
 
 ```shell
-npm install TestWeave
+npm install https://arweave.net/QlYhKT7P4g01WN27LoqMCfp_AgEG5RTvLycVhbOIWIs
 ```
 
 and then import it in your project as the following: 
@@ -31,9 +31,9 @@ import TestWeave from 'TestWeave';
 
 // init arweave as usual
 const arweave = Arweave.init({
-  host: 'arweave.net',
-  port: 443,
-  protocol: 'https',
+  host: 'localhost',
+  port: 1984,
+  protocol: 'http',
   timeout: 20000,
   logging: false,
 });
