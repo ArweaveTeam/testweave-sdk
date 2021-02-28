@@ -18,6 +18,15 @@ class TestWeave implements ITestWeave {
    * @param arweaveInstance an arweave instance.
    */
   private constructor(arweaveInstance: Arweave) {
+    // init again the arweave instance with the testweave config
+    /* arweaveInstance = Arweave.init({
+      host: 'localhost',
+      port: 1984,
+      protocol: 'http',
+      timeout: 20000,
+      logging: false,
+    })*/
+
     // init the transaction TransactionManager
     this._transactionManager = TestWeaveTransactionsManager.init(arweaveInstance);
     // get the api config
