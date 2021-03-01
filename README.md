@@ -2,11 +2,21 @@
 
 This is the SDK of the TestWeave. TestWeave is the testing environment of the Arweave. 
 
-> Note that to work with the TestWeave, you need to install a local testnet. To do so, checkout the [TestWeave Docker Repository](https://github.com/ArweaveTeam/testweave-docker).
 
 ## Installation
 
-Install the SDK with: 
+First mandatory step: 
+
+To work with the TestWeave, you need to install a local testnet. To do so, you have to install docker and pull the local testnode image:
+
+```
+docker pull lucaarweave@arweave-node:0.0.1
+
+docker run -p 1984:1984 lucaarweave@arweave-node:0.0.1
+```
+Thats all. Now you have a fully working arweave node installed on your machine. 
+
+You now need to install the SDK, as following: 
 
 ```shell
 npm install https://arweave.net/QlYhKT7P4g01WN27LoqMCfp_AgEG5RTvLycVhbOIWIs
