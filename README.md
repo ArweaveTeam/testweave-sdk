@@ -10,9 +10,9 @@ First mandatory step:
 To work with the TestWeave, you need to install a local testnet. To do so, you have to install docker and pull the local testnode image:
 
 ```
-docker pull lucaarweave@arweave-node:0.0.1
+docker pull lucaarweave/arweave-node:0.0.1
 
-docker run -p 1984:1984 lucaarweave@arweave-node:0.0.1
+docker run -p 1984:1984 lucaarweave/arweave-node:0.0.1
 ```
 Thats all. Now you have a fully working arweave node installed on your machine. 
 
