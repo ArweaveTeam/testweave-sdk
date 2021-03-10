@@ -56,11 +56,8 @@ export default class TestWeaveUtils implements ITestWeaveUtils {
   */
   public async mine(transactionManager: TestWeaveTransactionsManager): Promise<Array<string>> {
     // check if there are transactions in the pool that are not yet inserted in the tx/ready_for_mining
-    if (transactionManager.transactionsPool.length) {
-      const resolvedTransactions:Array<string> = await transactionManager.resolvePool([]);
-      return resolvedTransactions;
-    }
-    return []
+    const resolvedTransactions:Array<string> = await transactionManager.resolvePool();
+    return resolvedTransactions;
   }
 
   /**

@@ -2,55 +2,48 @@ import Arweave from 'arweave';
 import Transaction from 'arweave/node/lib/transaction';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import ITestWeaveTransactionsManager from '../interfaces/interface.testweave-transactions-manager';
-import TestWeaveUtils from './class.testweave-utils';
 
 export default class TestWeaveTransactionsManager implements ITestWeaveTransactionsManager {
   private _arweave: Arweave;
-  private _transactionsPool: Array<string>;
+
   /**
    * The constructor of the class. Should never be called directly, since this
    * is a static class.
    * @param arweaveInstance an arweave instance.
    */
-  private constructor(arweaveInstance: Arweave) {
+  private constructor(arweaveInstance: Arweave, transactionsPool: Array<string>) {
     this._arweave = arweaveInstance;
-    this._transactionsPool = [];
   }
 
   /**
    * Private constructor that creates the TransactionManager Instance
    * @param arweaveInstance the Arweave instance
    */
-  public static init(arweaveInstance: Arweave): TestWeaveTransactionsManager {
-    return new TestWeaveTransactionsManager(arweaveInstance);
-  }
-
-  /**
-   * Returns the transaction pool
-  */
-  public get transactionsPool(): Array<string> {
-    return this._transactionsPool;
+  public static async init(arweaveInstance: Arweave): Promise<TestWeaveTransactionsManager> {
+    const readyForMiningTxs: Array<string> = (await arweaveInstance.api.get('tx/ready_for_mining')).data;
+    return new TestWeaveTransactionsManager(arweaveInstance, readyForMiningTxs);
   }
 
   /**
    * Resolve the transactions pool
    * @param minedTransactions
    */
-  public async resolvePool(minedTransactions: Array<string>): Promise<Array<string>> {
-    if (this._transactionsPool.length) {
-      const readyForMiningTxs: Array<string> = (await this._arweave.api.get('tx/ready_for_mining')).data;
-      const lastTx: string = this._transactionsPool[this._transactionsPool.length - 1];
+  public async resolvePool(): Promise<Array<string>> {
+    // get the transaction pool
+    const readyForMiningTxs: Array<string> = (await this._arweave.api.get('tx/ready_for_mining')).data;
 
-      if (readyForMiningTxs.includes(lastTx)) {
-        await this._arweave.api.post('mine', '');
-        await TestWeaveUtils.init(this._arweave).delay(1001);
-        minedTransactions.push(this._transactionsPool.pop() as string);
-        return minedTransactions;
-      }
-      const results = await this.resolvePool(minedTransactions);
-      return results;
+    // if the pool contain transactions mine them
+    if (readyForMiningTxs.length) {
+      await this._arweave.api.post('mine', '');
     }
-    return minedTransactions;
+
+    // check that all the transactions that were in the pool have status 200
+    for (const txID of (await this._arweave.api.get('tx/ready_for_mining')).data) {
+      while ((await this._arweave.transactions.getStatus(txID)).status !== 200) {
+        false;
+      }
+    }
+    return readyForMiningTxs;
   }
 
   /**
@@ -69,9 +62,12 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
     try {
       const response = await this._arweave.api.request().post(endpoint, body, config);
       if (endpoint === 'tx') {
-        // eslint-disable-next-line @typescript-eslint/ban-types
         const { id } = body as Transaction;
-        this._transactionsPool.push(id);
+        // check if the transaction is already in the ready_for_mining pool. If not await for that before returning;
+        // const transactionPool: Array<string> = (await this._arweave.api.get('tx/ready_for_mining')).data
+        while (!(await this._arweave.api.get('tx/ready_for_mining')).data.includes(id)) {
+          false;
+        }
       }
       return response;
     } catch (error) {

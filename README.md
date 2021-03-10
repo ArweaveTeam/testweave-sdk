@@ -43,7 +43,7 @@ const arweave = Arweave.init({
 });
 
 // init TestWeave on the top of arweave
-const testWeave = TestWeave.init(arweave);
+const testWeave = await TestWeave.init(arweave);
 
 ```
 
@@ -69,7 +69,7 @@ const arweave = Arweave.init({
   logging: false,
 }); 
 
-const testWeave = TestWeave.init(arweave);
+const testWeave = await TestWeave.init(arweave);
 ```
 
 2. Create a data transaction, sign and post it

@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "ts-mocha tests/**/*.test.ts",
-    "test:free": "npx ts-node tests/free-tests.ts",
+    "test:free": "npm run build | npx ts-node tests/free-tests.ts",
     "coverage": "nyc npm test",
     "lint": "eslint src/**/*.ts",
     "generate:docs": "npx typedoc --excludePrivate --excludeProtected"

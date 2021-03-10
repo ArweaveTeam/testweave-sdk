@@ -6,7 +6,7 @@ import { expect } from 'chai';
 describe('testing TestWeave data transactions', function (): void {
   this.timeout(10000);
   it('This should correctly create a test data transaction', async (): Promise<void> => {
-    const testWeave = TestWeave.init(arweave);
+    const testWeave = await TestWeave.init(arweave);
     const data = `
     <html>
       <head>
@@ -30,7 +30,6 @@ describe('testing TestWeave data transactions', function (): void {
     await arweave.transactions.post(dataTransaction);
     await testWeave.mine();
     const statusAfter = await arweave.transactions.getStatus(dataTransaction.id)
-    console.log(dataTransaction.id);
     // the status should now be equal to 200
     expect(statusAfter.status).equal(200);
   });

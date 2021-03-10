@@ -17,18 +17,9 @@ class TestWeave implements ITestWeave {
    * is a static class.
    * @param arweaveInstance an arweave instance.
    */
-  private constructor(arweaveInstance: Arweave) {
-    // init again the arweave instance with the testweave config
-    /* arweaveInstance = Arweave.init({
-      host: 'localhost',
-      port: 1984,
-      protocol: 'http',
-      timeout: 20000,
-      logging: false,
-    })*/
-
+  private constructor(arweaveInstance: Arweave, transactionManager: TestWeaveTransactionsManager) {
     // init the transaction TransactionManager
-    this._transactionManager = TestWeaveTransactionsManager.init(arweaveInstance);
+    this._transactionManager = transactionManager;
     // get the api config
     const apiConfig = arweaveInstance.api.config;
     const testWeaveRequest = TestWeaveRequest.init(apiConfig);
@@ -53,12 +44,14 @@ class TestWeave implements ITestWeave {
    * @param arweaveInstance the arweave instance on the top of with the TestWeave must be created. The instance should be created with arweave.init().
    * @returns TestWeave a TestWeave instance.
   */
-  public static init(
+  public static async init(
     arweaveInstance: Arweave,
-  ): TestWeave {
+  ): Promise<TestWeave> {
     try {
+      // init the transactions manager
+      const transactionManager = await TestWeaveTransactionsManager.init(arweaveInstance);
       // create the testweave instace
-      const testWeaveInstance = new TestWeave(arweaveInstance);
+      const testWeaveInstance = new TestWeave(arweaveInstance, transactionManager);
       // return the testweave instance
       return testWeaveInstance;
     } catch (err) {

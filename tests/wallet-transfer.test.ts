@@ -3,7 +3,7 @@ import arweave from './_init_arweave';
 
 import { expect } from 'chai';
 
-describe('testing TestWeave', function (): void {
+describe('testing TestWeave wallet transfers transactions', function (): void {
   this.timeout(10000);
   it('should correctly init a TestWeave instance', () : void => {
     TestWeave.init(arweave);
@@ -16,7 +16,7 @@ describe('testing TestWeave', function (): void {
   });
 
   it('This should correctly retrieve the testweave root JWK and its address must be MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y', async (): Promise<void> => {
-    const testWeave = TestWeave.init(arweave);
+    const testWeave = await TestWeave.init(arweave);
     const rootAddress = await arweave.wallets.getAddress(testWeave.rootJWK);
     // const rootBalance = await arweave.wallets.getBalance(rootAddress);
 
