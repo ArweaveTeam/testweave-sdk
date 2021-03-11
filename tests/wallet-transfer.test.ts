@@ -4,7 +4,7 @@ import arweave from './_init_arweave';
 import { expect } from 'chai';
 
 describe('testing TestWeave wallet transfers transactions', function (): void {
-  this.timeout(10000);
+  this.timeout(20000);
   it('should correctly init a TestWeave instance', () : void => {
     TestWeave.init(arweave);
     expect(arweave.api).to.not.be.null;

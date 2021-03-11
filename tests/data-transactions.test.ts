@@ -4,7 +4,7 @@ import arweave from './_init_arweave';
 import { expect } from 'chai';
 
 describe('testing TestWeave data transactions', function (): void {
-  this.timeout(10000);
+  this.timeout(20000);
   it('This should correctly create a test data transaction', async (): Promise<void> => {
     const testWeave = await TestWeave.init(arweave);
     const data = `
