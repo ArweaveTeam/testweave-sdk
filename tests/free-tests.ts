@@ -61,7 +61,7 @@ const testContractCreation = async () => {
     const generatedAddr = await arweave.wallets.getAddress(jkw);
 
     try {
-      const iwt = await interactWrite(arweave, testWeave.rootJWK, 'Nz-grrERx1-sWKNHhgipwPC8g0fRg7I20-FDErIzti8', {
+      const iwt = await interactWrite(arweave, testWeave.rootJWK, c, {
         function: 'transfer',
         target: generatedAddr,
         qty:5000
@@ -75,7 +75,7 @@ const testContractCreation = async () => {
     const generatedAddressBalance = await arweave.wallets.getBalance(generatedAddr)
     console.log(generatedAddressBalance);
 
-    const afterTransaction = await readContract(arweave, 'Nz-grrERx1-sWKNHhgipwPC8g0fRg7I20-FDErIzti8');
+    const afterTransaction = await readContract(arweave, c);
     console.log(`After interact write: ${JSON.stringify(afterTransaction)}`);
 
     // make an interact write by hand
@@ -88,7 +88,7 @@ const testContractCreation = async () => {
     // add tags to the transaction in order to make it a contract call
     transaction.addTag('App-Name', 'SmartWeaveAction');
     transaction.addTag('App-Version', '0.3.0');
-    transaction.addTag('Contract', 'r8fqwSs4hptJwP9cMiXXqBcIbV2lIn81HCJGLiC1vWc');
+    transaction.addTag('Contract', c);
     transaction.addTag('Input', JSON.stringify({
       function: 'transfer',
       target: generatedAddr,
@@ -103,7 +103,7 @@ const testContractCreation = async () => {
       console.log(err);
     }
     await testWeave.mine();
-    const afterManualTransaction = await readContract(arweave, 'Nz-grrERx1-sWKNHhgipwPC8g0fRg7I20-FDErIzti8');
+    const afterManualTransaction = await readContract(arweave, c);
     console.log(`After manual transaction write: ${JSON.stringify(afterManualTransaction)}`);
     const generatedAddressBalances = await arweave.wallets.getBalance(generatedAddr)
     console.log(generatedAddressBalances);
@@ -116,6 +116,9 @@ const testContractCreation = async () => {
 }
 
 testContractCreation();
+
+// anuB7d7yEh4E2y_Uo0dYasieRVY8z6_3myOl7n7w3PU
+
 
 // Nz-grrERx1-sWKNHhgipwPC8g0fRg7I20-FDErIzti8
 // r8fqwSs4hptJwP9cMiXXqBcIbV2lIn81HCJGLiC1vWc
