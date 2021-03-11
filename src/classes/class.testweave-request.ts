@@ -28,6 +28,7 @@ export default class TestWeaveRequest implements ITestWeaveRequest {
         'X-Network': 'arweave.testnet',
       }
     });
+    // console.log(instance);
     return new TestWeaveRequest(instance);
   }
 

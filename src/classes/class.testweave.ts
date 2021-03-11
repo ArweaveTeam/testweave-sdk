@@ -22,16 +22,22 @@ class TestWeave implements ITestWeave {
     this._transactionManager = transactionManager;
     // get the api config
     const apiConfig = arweaveInstance.api.config;
+
     const testWeaveRequest = TestWeaveRequest.init(apiConfig);
     // overwrite the arweave.api.request method, so that it can include the requested headers
     arweaveInstance.api.request = () => testWeaveRequest.getRequest();
-    // overwrite the arweave.api.request method, so that it can save requests bye means of the transaction manager
+    // overwrite the arweave.api.post method, so that it can send requests by means of the transaction manager
     arweaveInstance.api.post = (
       endpoint: string,
       // eslint-disable-next-line @typescript-eslint/ban-types
       body: Buffer | string | object,
       config?: AxiosRequestConfig,
     ) => this._transactionManager.getPost(endpoint, body, config);
+    // overwrite the arweave.api.get method, so that it can send requests by means of the transaction manager
+    arweaveInstance.api.get = (
+      endpoint: string,
+      config?: AxiosRequestConfig,
+    ) => this._transactionManager.getGet(endpoint, config);
     // init the arweave instance
     this._arweave = arweaveInstance;
     // init the utils

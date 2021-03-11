@@ -8,4 +8,8 @@ export default interface ITestWeaveTransactionsManager {
     body: Buffer | string | object,
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse>;
+  getGet(
+    endpoint: string,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse>;
 }

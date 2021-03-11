@@ -11,7 +11,7 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
    * is a static class.
    * @param arweaveInstance an arweave instance.
    */
-  private constructor(arweaveInstance: Arweave, transactionsPool: Array<string>) {
+  private constructor(arweaveInstance: Arweave) {
     this._arweave = arweaveInstance;
   }
 
@@ -20,8 +20,8 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
    * @param arweaveInstance the Arweave instance
    */
   public static async init(arweaveInstance: Arweave): Promise<TestWeaveTransactionsManager> {
-    const readyForMiningTxs: Array<string> = (await arweaveInstance.api.get('tx/ready_for_mining')).data;
-    return new TestWeaveTransactionsManager(arweaveInstance, readyForMiningTxs);
+    // const readyForMiningTxs: Array<string> = (await arweaveInstance.api.get('tx/ready_for_mining')).data;
+    return new TestWeaveTransactionsManager(arweaveInstance);
   }
 
   /**
@@ -47,6 +47,32 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
   }
 
   /**
+   * This is a get method that is intended to replace the arwwave.api get one.
+   * It does the same things of the arweave.api one, but it pull the internal rewrites the baseUrl if needed
+   * @param endpoint the endpoint that must be called
+   * @param config the optional configurations that must be sent along the post request
+   */
+  public async getGet(
+    endpoint: string,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse> {
+    try {
+      // get the request
+      const request = this._arweave.api.request();
+      // console.log(request);
+      request.defaults.baseURL = 'http://localhost:1984';
+      const response = await request.get(endpoint, config);
+      return response;
+    } catch (error) {
+      if (error.response && error.response.status) {
+        return error.response;
+      }
+
+      throw error;
+    }
+  }
+
+  /**
    * This is a post method that is intended to replace the arwwave.api post one.
    * It does the same things of the arweave.api one, but it pull the internal transactions pool too.
    * @param endpoint the endpoint that must be called
@@ -60,7 +86,12 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse> {
     try {
-      const response = await this._arweave.api.request().post(endpoint, body, config);
+      // get the request
+      const request = this._arweave.api.request();
+      if (endpoint === 'graphql') {
+        request.defaults.baseURL = 'http://localhost';
+      }
+      const response = await request.post(endpoint, body, config);
       if (endpoint === 'tx') {
         const { id } = body as Transaction;
         // check if the transaction is already in the ready_for_mining pool. If not await for that before returning;

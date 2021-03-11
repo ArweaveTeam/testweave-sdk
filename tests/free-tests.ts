@@ -1,7 +1,7 @@
 import TestWeave from '../dist/index';
 import Arweave from 'arweave';
 
-import { createContract, readContract } from 'smartweave';
+import { createContract, readContract, interactWrite, interactWriteDryRun } from 'smartweave';
 
 import fs from 'fs';
 
@@ -44,19 +44,71 @@ const testTenTransactions = async () => {
 
 const testContractCreation = async () => {
   const testWeave = await TestWeave.init(arweave);
-  console.log(contractInitState);
-  console.log(contractSource);
 
   // creat the contract
   try {
     const c = await createContract(arweave, testWeave.rootJWK, contractSource, JSON.stringify(contractInitState));
-    console.log(c);
     const d = await testWeave.mine();
     console.log(d);
 
 
+    const testRead = await readContract(arweave, c);
+    console.log(`before interact write: ${JSON.stringify(testRead)}`);
 
-    const testRead = readContract(arweave, c).then(console.log);
+
+    // try to interact with the contract
+    const jkw = await arweave.wallets.generate();
+    const generatedAddr = await arweave.wallets.getAddress(jkw);
+
+    try {
+      const iwt = await interactWrite(arweave, testWeave.rootJWK, 'Nz-grrERx1-sWKNHhgipwPC8g0fRg7I20-FDErIzti8', {
+        function: 'transfer',
+        target: generatedAddr,
+        qty:5000
+      }, [] , generatedAddr, '23999392')
+      console.log(`Interact write transaction: ${JSON.stringify(iwt)}`);
+    } catch (err) {
+      console.log(err);
+    }
+
+    await testWeave.mine();
+    const generatedAddressBalance = await arweave.wallets.getBalance(generatedAddr)
+    console.log(generatedAddressBalance);
+
+    const afterTransaction = await readContract(arweave, 'Nz-grrERx1-sWKNHhgipwPC8g0fRg7I20-FDErIzti8');
+    console.log(`After interact write: ${JSON.stringify(afterTransaction)}`);
+
+    // make an interact write by hand
+    // create the transaction
+    const transaction = await arweave.createTransaction({
+      target: generatedAddr,
+      quantity: '12212121',
+    }, testWeave.rootJWK);
+
+    // add tags to the transaction in order to make it a contract call
+    transaction.addTag('App-Name', 'SmartWeaveAction');
+    transaction.addTag('App-Version', '0.3.0');
+    transaction.addTag('Contract', 'r8fqwSs4hptJwP9cMiXXqBcIbV2lIn81HCJGLiC1vWc');
+    transaction.addTag('Input', JSON.stringify({
+      function: 'transfer',
+      target: generatedAddr,
+      qty:5000
+    }));
+
+    // sign the transaction
+    try {
+      await arweave.transactions.sign(transaction, testWeave.rootJWK);
+      await arweave.transactions.post(transaction);
+    } catch (err) {
+      console.log(err);
+    }
+    await testWeave.mine();
+    const afterManualTransaction = await readContract(arweave, 'Nz-grrERx1-sWKNHhgipwPC8g0fRg7I20-FDErIzti8');
+    console.log(`After manual transaction write: ${JSON.stringify(afterManualTransaction)}`);
+    const generatedAddressBalances = await arweave.wallets.getBalance(generatedAddr)
+    console.log(generatedAddressBalances);
+
+
   } catch (err) {
     console.log(err);
   }
@@ -64,5 +116,9 @@ const testContractCreation = async () => {
 }
 
 testContractCreation();
+
+// Nz-grrERx1-sWKNHhgipwPC8g0fRg7I20-FDErIzti8
+// r8fqwSs4hptJwP9cMiXXqBcIbV2lIn81HCJGLiC1vWc
+// iw transaction 9UmmsDY5-fnc6As2PlMXgPA2t0A92arPkaUX1nQyMTU
 
 // testTenTransactions();
