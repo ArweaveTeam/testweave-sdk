@@ -13,7 +13,7 @@ __To work with the TestWeave, you need to install a local testnet. To do so, fol
 To install the SDK, as following: 
 
 ```shell
-npm install https://arweave.net/QlYhKT7P4g01WN27LoqMCfp_AgEG5RTvLycVhbOIWIs
+npm install https://arweave.net/H52Xs9KFEM_QFKI7rV07btWHjv4LbXugjVd3hDiGYpU
 ```
 
 and then import it in your project as the following: 
