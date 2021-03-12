@@ -133,9 +133,9 @@ import { createContract, readContract, interactWrite, interactWriteDryRun } from
 import fs from 'fs';
 
 // import the sample contract init state
-import contractInitState from './fixtures/token-pst-contract.json';
+import contractInitState from 'token-pst-contract.json';
 // load the contract as a string
-const contractSource = fs.readFileSync('tests/fixtures/token-pst-contract.js').toString();
+const contractSource = fs.readFileSync('token-pst-contract.js').toString();
 
 // create the contract and mine the transaction for creating it
 const c = await createContract(arweave, testWeave.rootJWK, contractSource, JSON.stringify(contractInitState));
