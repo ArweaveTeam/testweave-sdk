@@ -126,7 +126,7 @@ const arweave = Arweave.init({
 const testWeave = await TestWeave.init(arweave);
 ```
 
-2. Create a SmartWeave PST contract. You can find a sample contract source and its init state (built on the TestWeave root address) here: [https://github.com/ArweaveTeam/testweave-sdk/tree/main/tests/fixtures](https://github.com/ArweaveTeam/testweave-sdk/tree/main/tests/fixtures)
+2. Create a SmartWeave PST contract (you can find a sample contract source and its init state, built on the TestWeave root address, here: [https://github.com/ArweaveTeam/testweave-sdk/tree/main/tests/fixtures](https://github.com/ArweaveTeam/testweave-sdk/tree/main/tests/fixtures):
 
 ```javascript
 import { createContract, readContract, interactWrite, interactWriteDryRun } from 'smartweave';
