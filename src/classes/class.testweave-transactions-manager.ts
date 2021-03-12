@@ -2,6 +2,7 @@ import Arweave from 'arweave';
 import Transaction from 'arweave/node/lib/transaction';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import ITestWeaveTransactionsManager from '../interfaces/interface.testweave-transactions-manager';
+import TestWeaveUtils from './class.testweave-utils';
 
 export default class TestWeaveTransactionsManager implements ITestWeaveTransactionsManager {
   private _arweave: Arweave;
@@ -41,6 +42,16 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
     for (const txID of (await this._arweave.api.get('tx/ready_for_mining')).data) {
       while ((await this._arweave.transactions.getStatus(txID)).status !== 200) {
         false;
+      }
+      // if the transaction is a smartweave interaction await for one second
+      const tx: Transaction = await this._arweave.transactions.get(txID);
+      const txTags = await tx.get('tags') as unknown as Array<any>;
+      for (const tag of txTags) {
+        const key = tag.get('name', {decode: true, string: true});
+        const value = tag.get('value', {decode: true, string: true});
+        if (key === 'App-Name' && value === 'SmartWeaveAction') {
+          await TestWeaveUtils.init(this._arweave).delay(1001);
+        }
       }
     }
     return readyForMiningTxs;

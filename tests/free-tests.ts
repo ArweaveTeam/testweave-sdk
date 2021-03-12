@@ -51,10 +51,8 @@ const testContractCreation = async () => {
     const d = await testWeave.mine();
     console.log(d);
 
-
-    const testRead = await readContract(arweave, c);
-    console.log(`before interact write: ${JSON.stringify(testRead)}`);
-
+    const beforeTransaction = await readContract(arweave, c);
+    console.log(`Before interact write: ${JSON.stringify(beforeTransaction)}`);
 
     // try to interact with the contract
     const jkw = await arweave.wallets.generate();
@@ -67,11 +65,11 @@ const testContractCreation = async () => {
         qty:5000
       }, [] , generatedAddr, '23999392')
       console.log(`Interact write transaction: ${JSON.stringify(iwt)}`);
+      await testWeave.mine();
     } catch (err) {
       console.log(err);
     }
 
-    await testWeave.mine();
     const generatedAddressBalance = await arweave.wallets.getBalance(generatedAddr)
     console.log(generatedAddressBalance);
 
@@ -113,10 +111,37 @@ const testContractCreation = async () => {
     console.log(err);
   }
 
-}
+};
 
-testContractCreation();
+const testContractInteraction = async (contractID: string) => {
+  const testWeave = await TestWeave.init(arweave);
 
+  const testRead = await readContract(arweave, contractID);
+  console.log(`before interact write: ${JSON.stringify(testRead)}`);
+
+  const jkw = await arweave.wallets.generate();
+  const generatedAddr = await arweave.wallets.getAddress(jkw);
+
+  // for (let i = 0; i <= 100; i++) {
+  await interactWrite(arweave, testWeave.rootJWK, contractID, {
+    function: 'transfer',
+    target: generatedAddr,
+    qty: 42
+  }, [], generatedAddr, '1')
+  //console.log(i);
+  // }
+
+  await testWeave.mine();
+
+  const afterTransaction = await readContract(arweave, contractID);
+  console.log(`After interact write: ${JSON.stringify(afterTransaction)}`);
+
+
+
+};
+
+// testContractCreation();
+testContractInteraction('JzygoWhwr3T_IwlOlUIyRTspE9DI5xRTA9BI-9PyRZs');
 // anuB7d7yEh4E2y_Uo0dYasieRVY8z6_3myOl7n7w3PU
 
 
