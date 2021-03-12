@@ -107,6 +107,70 @@ console.log(statusAfterMine); // this will return 200
 
 Thats it! 
 
+## Example 2 - Publishing and Interacting with SmartWeave Contracts
+
+1. Initialize the arweave node and the TestWeave on it:
+   
+```javascript
+import Arweave from 'arweave';
+import TestWeave from 'testweave-sdk';
+
+const arweave = Arweave.init({
+  host: 'localhost',
+  port: 1984,
+  protocol: 'http',
+  timeout: 20000,
+  logging: false,
+}); 
+
+const testWeave = await TestWeave.init(arweave);
+```
+
+2. Create a SmartWeave PST contract. You can find a sample contract source and its init state (built on the TestWeave root address) here: [https://github.com/ArweaveTeam/testweave-sdk/tree/main/tests/fixtures](https://github.com/ArweaveTeam/testweave-sdk/tree/main/tests/fixtures)
+
+```javascript
+import { createContract, readContract, interactWrite, interactWriteDryRun } from 'smartweave';
+import fs from 'fs';
+
+// import the sample contract init state
+import contractInitState from './fixtures/token-pst-contract.json';
+// load the contract as a string
+const contractSource = fs.readFileSync('tests/fixtures/token-pst-contract.js').toString();
+
+// create the contract and mine the transaction for creating it
+const c = await createContract(arweave, testWeave.rootJWK, contractSource, JSON.stringify(contractInitState));
+await testWeave.mine();
+```
+3. Read the contract state, transfer some token to a generated wallet, and read again the contract state
+
+```javascript
+// read the contract before performing any interaction
+const beforeTransaction = await readContract(arweave, c);
+console.log(`Before interact write: ${JSON.stringify(beforeTransaction)}`)
+
+// generate a wallet
+const jkw = await arweave.wallets.generate();
+const generatedAddr = await arweave.wallets.getAddress(jkw)
+
+// interact with the contract
+const iwt = await interactWrite(arweave, testWeave.rootJWK, c, {
+  function: 'transfer',
+  target: generatedAddr,
+  qty:5000
+}, [] , generatedAddr, '23999392')
+console.log(`Interact write transaction: ${JSON.stringify(iwt)}`);
+
+// mine the contract interaction transaction
+await testWeave.mine();
+
+// get the new balance of the generated address (it should be 23999392)
+const generatedAddressBalance = await arweave.wallets.getBalance(generatedAddr)
+console.log(generatedAddressBalance)
+
+// read the contract after the interact write transaction (the generated wallet should own 5000 tokens)
+const afterTransaction = await readContract(arweave, c);
+console.log(`After interact write: ${JSON.stringify(afterTransaction)}`);
+```
 ## SDK helpers
 
 For easily test Arweave applications, the SDK supplies the helpers described in the following sections. 
