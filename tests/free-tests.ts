@@ -90,7 +90,7 @@ const testContractCreation = async () => {
     transaction.addTag('Input', JSON.stringify({
       function: 'transfer',
       target: generatedAddr,
-      qty:5000
+      qty:101
     }));
 
     // sign the transaction
@@ -122,14 +122,11 @@ const testContractInteraction = async (contractID: string) => {
   const jkw = await arweave.wallets.generate();
   const generatedAddr = await arweave.wallets.getAddress(jkw);
 
-  // for (let i = 0; i <= 100; i++) {
   await interactWrite(arweave, testWeave.rootJWK, contractID, {
     function: 'transfer',
     target: generatedAddr,
     qty: 42
   }, [], generatedAddr, '1')
-  //console.log(i);
-  // }
 
   await testWeave.mine();
 
@@ -141,7 +138,7 @@ const testContractInteraction = async (contractID: string) => {
 };
 
 // testContractCreation();
-testContractInteraction('JzygoWhwr3T_IwlOlUIyRTspE9DI5xRTA9BI-9PyRZs');
+testContractInteraction('bzXGTk5QtMH5MQ7t8OCofafVy-y3d82CLSOzn-aus6E');
 // anuB7d7yEh4E2y_Uo0dYasieRVY8z6_3myOl7n7w3PU
 
 
