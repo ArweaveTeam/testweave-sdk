@@ -10,7 +10,13 @@ __To work with the TestWeave, you need to install a local testnet. To do so, fol
 
 ## Installation 
 
-To install the SDK, as following: 
+You can install the SDK by means of NPM, as following: 
+
+```
+npm install testweave-sdk
+```
+
+Or you can grab the package directly from the arweave, as following: 
 
 ```shell
 npm install https://arweave.net/5dl6CxW93FR6jtOWllu6ky0fg8RbRkOWjkLGZPBq54Q
