@@ -37,7 +37,7 @@ The SDK supplies handlers for testing the followings:
 Firstly you need to create a TestWeave instance on the top on an Arweave node, as following: 
 
 ```javascript
-import TestWeave from 'TestWeave';
+import TestWeave from 'testweave-sdk';
 
 // init arweave as usual
 const arweave = Arweave.init({

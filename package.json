@@ -1,6 +1,6 @@
 {
   "name": "testweave-sdk",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "This is the SDK of TestWeave. TestWeave is the testing environment of the Arweave.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
