@@ -1,6 +1,7 @@
 import Arweave from 'arweave';
 import Transaction from 'arweave/node/lib/transaction';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { readContract } from 'smartweave';
 import ITestWeaveTransactionsManager from '../interfaces/interface.testweave-transactions-manager';
 import TestWeaveUtils from './class.testweave-utils';
 
@@ -41,6 +42,7 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
     // check that all the transactions that were in the pool have status 200
     for (const txID of (await this._arweave.api.get('tx/ready_for_mining')).data) {
       while ((await this._arweave.transactions.getStatus(txID)).status !== 200) {
+        await TestWeaveUtils.init(this._arweave).delay(505);
         false;
       }
       // if the transaction is a smartweave interaction await for one second
@@ -49,8 +51,18 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
       for (const tag of txTags) {
         const key = tag.get('name', {decode: true, string: true});
         const value = tag.get('value', {decode: true, string: true});
-        if (key === 'App-Name' && value === 'SmartWeaveAction') {
-          await TestWeaveUtils.init(this._arweave).delay(1001);
+        if ((key === 'Contract-Src')) {
+          // await this._arweave.api.post('mine', '');
+          // if it is a smartweave contract, it creates and send a fake init interaction
+          /* const iwt = await interactWrite(this._arweave, TestWeaveUtils.init(this._arweave).getRootJWK(), value, {
+            function: '',
+          }, []);
+          await this._arweave.api.post('mine', '');
+          console.log(iwt);*/
+          // const fRead = await readContract(this._arweave, value);
+          // console.log(fRead);
+
+          // await TestWeaveUtils.init(this._arweave).delay(1001);
         }
       }
     }
