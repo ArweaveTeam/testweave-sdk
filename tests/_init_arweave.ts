@@ -3,7 +3,7 @@ import Arweave from 'arweave';
 // test net
 const arweave = Arweave.init({
   host: 'localhost',
-  port: 1984,
+  port: 80,
   protocol: 'http',
   timeout: 20000,
   logging: false,

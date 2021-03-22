@@ -112,7 +112,7 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
       // get the request
       const request = this._arweave.api.request();
       if (endpoint === 'graphql') {
-        request.defaults.baseURL = 'http://localhost';
+        request.defaults.baseURL = 'http://localhost/graphql';
       }
       const response = await request.post(endpoint, body, config);
       if (endpoint === 'tx') {
