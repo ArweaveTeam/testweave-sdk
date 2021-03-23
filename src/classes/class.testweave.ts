@@ -1,7 +1,7 @@
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { AxiosRequestConfig } from 'axios';
-import ITestWeave from '../interfaces/interface.TestWeave';
+import ITestWeave from '../interfaces/interface.testweave';
 import TestWeaveRequest from './class.testweave-request';
 import TestWeaveTransactionsManager from './class.testweave-transactions-manager';
 import TestWeaveUtils from './class.testweave-utils';
