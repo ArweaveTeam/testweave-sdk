@@ -1,7 +1,6 @@
 import Arweave from 'arweave';
 import Transaction from 'arweave/node/lib/transaction';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { readContract } from 'smartweave';
 import ITestWeaveTransactionsManager from '../interfaces/interface.testweave-transactions-manager';
 import TestWeaveUtils from './class.testweave-utils';
 
@@ -31,42 +30,26 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
    * @param minedTransactions
    */
   public async resolvePool(): Promise<Array<string>> {
-    // get the transaction pool
-    const readyForMiningTxs: Array<string> = (await this._arweave.api.get('tx/ready_for_mining')).data;
+    try {
+      // get the transaction pool
+      const readyForMiningTxs: Array<string> = (await this._arweave.api.get('tx/ready_for_mining')).data;
 
-    // if the pool contain transactions mine them
-    if (readyForMiningTxs.length) {
-      await this._arweave.api.post('mine', '');
-    }
-
-    // check that all the transactions that were in the pool have status 200
-    for (const txID of (await this._arweave.api.get('tx/ready_for_mining')).data) {
-      while ((await this._arweave.transactions.getStatus(txID)).status !== 200) {
-        await TestWeaveUtils.init(this._arweave).delay(505);
-        false;
+      // if the pool contain transactions mine them
+      if (readyForMiningTxs.length) {
+        await this._arweave.api.post('mine', '');
       }
-      // if the transaction is a smartweave interaction await for one second
-      const tx: Transaction = await this._arweave.transactions.get(txID);
-      const txTags = await tx.get('tags') as unknown as Array<any>;
-      for (const tag of txTags) {
-        const key = tag.get('name', {decode: true, string: true});
-        const value = tag.get('value', {decode: true, string: true});
-        if ((key === 'Contract-Src')) {
-          // await this._arweave.api.post('mine', '');
-          // if it is a smartweave contract, it creates and send a fake init interaction
-          /* const iwt = await interactWrite(this._arweave, TestWeaveUtils.init(this._arweave).getRootJWK(), value, {
-            function: '',
-          }, []);
-          await this._arweave.api.post('mine', '');
-          console.log(iwt);*/
-          // const fRead = await readContract(this._arweave, value);
-          // console.log(fRead);
 
-          // await TestWeaveUtils.init(this._arweave).delay(1001);
+      // check that all the transactions that were in the pool have status 200
+      for (const txID of (await this._arweave.api.get('tx/ready_for_mining')).data) {
+        while ((await this._arweave.transactions.getStatus(txID)).status !== 200) {
+          await TestWeaveUtils.init(this._arweave).delay(505);
+          false;
         }
       }
+      return readyForMiningTxs;
+    } catch (error) {
+      return error.response;
     }
-    return readyForMiningTxs;
   }
 
   /**
@@ -83,15 +66,11 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
       // get the request
       const request = this._arweave.api.request();
       // console.log(request);
-      request.defaults.baseURL = 'http://localhost:1984';
+      request.defaults.baseURL = 'http://localhost';
       const response = await request.get(endpoint, config);
       return response;
     } catch (error) {
-      if (error.response && error.response.status) {
-        return error.response;
-      }
-
-      throw error;
+      return error.response;
     }
   }
 
@@ -112,7 +91,7 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
       // get the request
       const request = this._arweave.api.request();
       if (endpoint === 'graphql') {
-        request.defaults.baseURL = 'http://localhost/graphql';
+        request.defaults.baseURL = 'http://localhost';
       }
       const response = await request.post(endpoint, body, config);
       if (endpoint === 'tx') {
@@ -125,11 +104,7 @@ export default class TestWeaveTransactionsManager implements ITestWeaveTransacti
       }
       return response;
     } catch (error) {
-      if (error.response && error.response.status) {
-        return error.response;
-      }
-
-      throw error;
+      return error.response;
     }
   }
 }

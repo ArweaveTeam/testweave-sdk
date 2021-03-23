@@ -19,7 +19,7 @@ npm install testweave-sdk
 Or you can grab the package directly from the arweave, as following: 
 
 ```shell
-npm install https://arweave.net/5dl6CxW93FR6jtOWllu6ky0fg8RbRkOWjkLGZPBq54Q
+npm install https://arweave.net/k1ri3Kr8DT1FzLHOiBytsRLFY7zwTAuKjYyaJclZgGk
 ```
 
 and then import it in your project as the following: 
