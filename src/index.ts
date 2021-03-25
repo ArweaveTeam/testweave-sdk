@@ -1,3 +1,3 @@
-import TestWeave from './classes/class.TestWeave';
+import TestWeave from './classes/class.testweave';
 
 export default TestWeave;

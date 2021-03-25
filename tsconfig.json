@@ -1,15 +1,19 @@
 
 {
     "compilerOptions": { 
-        "target": "es6", 
-        "lib": ["es2017", "es7", "es6", "dom"],
-        "module": "commonjs",
-        "strict": true, 
+        "moduleResolution": "node",
+        "target": "ES5",
+        "module": "CommonJS",
+        "lib": ["ESNext", "DOM"],
+        "sourceMap": true,
         "declaration": true,
-        "outDir": "dist",
         "esModuleInterop": true,
         "resolveJsonModule": true,
+        "outDir": "dist"
     },
+    "include": [
+        "src"
+    ],
     "exclude": [
         "tests",
         "dist",
