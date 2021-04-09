@@ -18,7 +18,6 @@ describe('testing TestWeave wallet transfers transactions', function (): void {
   it('This should correctly retrieve the testweave root JWK and its address must be MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y', async (): Promise<void> => {
     const testWeave = await TestWeave.init(arweave);
     const rootAddress = await arweave.wallets.getAddress(testWeave.rootJWK);
-    // const rootBalance = await arweave.wallets.getBalance(rootAddress);
 
     const jkw = await arweave.wallets.generate();
     const generatedAddr = await arweave.wallets.getAddress(jkw);

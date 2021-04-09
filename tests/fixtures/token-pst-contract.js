@@ -23,6 +23,10 @@ export function handle (state, action) {
       throw new ContractError(`Caller balance not high enough to send ${qty} token(s)!`)
     }
 
+    // create the balances for the target if it not exists
+    if (!balances[target]) {
+      balances[target] = 0;
+    }
     // Lower the token balance of the caller
     balances[caller] -= qty
     if (target in balances) {

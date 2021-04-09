@@ -12,13 +12,7 @@ const contractSource = fs.readFileSync('tests/fixtures/token-pst-contract.js').t
 const data = 'headsa addsada';
 
 // test net
-const arweave = Arweave.init({
-  host: 'localhost',
-  port: 1984,
-  protocol: 'http',
-  timeout: 20000,
-  logging: false,
-});
+const arweave = Arweave.init({});
 
 
 
@@ -60,7 +54,7 @@ const testContractCreation = async () => {
   const jkw = await arweave.wallets.generate();
   const generatedAddr = await arweave.wallets.getAddress(jkw);
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 1; i++) {
     console.log(`Interaction number ${i}`);
     const iwt = await interactWrite(arweave, testWeave.rootJWK, c, {
       function: 'transfer',
@@ -68,14 +62,27 @@ const testContractCreation = async () => {
       qty:1
     }, [], generatedAddr, '1')
 
-    console.log(`Interact write transaction n ${i}: ${JSON.stringify(iwt)}`);
+    const a = await arweave.transactions.getStatus(iwt)
+    console.log(a);
+    try {
+      await testWeave.mine();
+    } catch (e) {
+      console.log(e);
+    }
+    const b = await arweave.transactions.getStatus(iwt)
+    console.log(b);
+    /* for (let y = 0; y < 101; y++) {
+      const afterTransaction = await readContract(arweave, c);
+      console.log(`${y}: ${JSON.stringify(afterTransaction)}`);
+    }*/
+    /* console.log(`Interact write transaction n ${i}: ${JSON.stringify(iwt)}`);
     await testWeave.mine();
 
     const generatedAddressBalance = await arweave.wallets.getBalance(generatedAddr)
     console.log(`AR balance after interact write n ${i}: ${generatedAddressBalance}`);
 
     const afterTransaction = await readContract(arweave, c);
-    console.log(`After interact write n ${i}: ${JSON.stringify(afterTransaction)}`);
+    console.log(`After interact write n ${i}: ${JSON.stringify(afterTransaction)}`); */
   }
 
   // make an interact write by hand
