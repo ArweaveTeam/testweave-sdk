@@ -25,7 +25,7 @@ npm install https://arweave.net/IkZLzAPt8ArujsQL6Y7Rx1CTZx8N0hgUTLvl5_Uokls
 and then import it in your project as the following: 
 
 ```javascript
-import TestWeave from 'TestWeave';
+import TestWeave from 'testweave-sdk';
 ```
 ## Usage
 
