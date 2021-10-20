@@ -1,5 +1,5 @@
 {
-  "name": "testweave-sdk",
+  "name": "@futuremint-io/testweave-sdk",
   "version": "0.2.2",
   "description": "This is the SDK of TestWeave. TestWeave is the testing environment of the Arweave.",
   "main": "dist/index.js",
