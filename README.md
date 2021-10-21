@@ -207,7 +207,11 @@ Returns the root JWK, it has an initial balance of 10000000 and the address MlV6
 const rootJWK = await testWeave.rootJWK;
 ```
 
+## Troubleshooting
 
+If you get issues with testweave-docker, it sometimes helps to hard reset:
 
-
-
+1. $ docker-compose down if it's still running
+2. $ docker container prune
+3. $ docker volume prune
+4. $ docker-compose up
